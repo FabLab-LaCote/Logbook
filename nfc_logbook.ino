@@ -115,15 +115,16 @@ void http_request(uint32_t id) {
   if (client.connect(server, 80)) {
     Serial.println("connected");
     // Make a HTTP request:
-    //client.print("GET /iot/logbook/nfc.php?id=");
-    client.print("GET /wp-admin/admin-ajax.php?action=fablab_logbook_entry&id=");
+    //Old parameter: client.print("GET /iot/logbook/nfc.php?id=");
+    client.print("GET http://admin.fablab-lacote.ch/api/nfc/record?id=");
     client.print(id);
     client.print("&a=");
     client.print(digitalRead(8));
     client.print("&b=");
     client.print(digitalRead(9));
     client.println(" HTTP/1.1");
-    client.println("Host: www.fablab-lacote.ch");
+	//Old parameter: client.println("Host: www.fablab-lacote.ch"); 
+	client.println("Host: admin.fablab-lacote.ch");
     client.println("Content-Type: application/json");
     client.println("Connection: close");
     client.println();
