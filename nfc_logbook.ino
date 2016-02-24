@@ -24,7 +24,7 @@ PN532 nfc(SCK, MISO, MOSI, SS);
 
 
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-char server[] = "www.fablab-lacote.ch";
+char server[] = "admin.fablab-lacote.ch";
 
 // Set the static IP address to use if the DHCP fails to assign
 IPAddress ip(192, 168, 0, 177);
@@ -116,16 +116,16 @@ void http_request(uint32_t id) {
     Serial.println("connected");
     // Make a HTTP request:
     //Old parameter: client.print("GET /iot/logbook/nfc.php?id=");
-    client.print("GET http://admin.fablab-lacote.ch/api/nfc/record?id=");
+    client.print("GET /api/nfc/record?id=");
     client.print(id);
     client.print("&a=");
     client.print(digitalRead(8));
     client.print("&b=");
     client.print(digitalRead(9));
     client.println(" HTTP/1.1");
-	//Old parameter: client.println("Host: www.fablab-lacote.ch"); 
+	//Old parameter: client.println("Host: admin.fablab-lacote.ch"); 
 	client.println("Host: admin.fablab-lacote.ch");
-    client.println("Content-Type: application/json");
+    //client.println("Content-Type: application/json");
     client.println("Connection: close");
     client.println();
   }

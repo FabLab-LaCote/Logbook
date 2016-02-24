@@ -5,7 +5,7 @@
 // by Seeed Technology Inc (www.seeedstudio.com)
 
 
-#include <WProgram.h>
+#include <arduino.h>
 
 #define PN532_PREAMBLE 0x00
 #define PN532_STARTCODE1 0x00
