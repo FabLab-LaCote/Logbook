@@ -1,8 +1,7 @@
 /*
-  Logbook for FabLab La Côte
+  Logbook for FabLab La CÃ´te
   www.fablab-lacote.ch
   May 2015, Gregor Bruhin
-
 */
 
 #include <SPI.h>
@@ -79,10 +78,10 @@ void setup() {
   nfc.SAMConfig();
 
   for (int i = 1; i < 300; i++) {
-    digitalWrite(SoundPin, HIGH);   // set the pin HIGH
-    delayMicroseconds(400 - i);     // wait for a bit
-    digitalWrite(SoundPin, LOW);    // set the pin LOW
-    delayMicroseconds(400 - i);     // wait for a bit
+    digitalWrite(SoundPin, HIGH); // set the pin HIGH
+    delayMicroseconds(400 - i); // wait for a bit
+    digitalWrite(SoundPin, LOW); // set the pin LOW
+    delayMicroseconds(400 - i); // wait for a bit
   }
 
   Serial.println("Finished Startup...");
@@ -123,8 +122,8 @@ void http_request(uint32_t id) {
     client.print("&b=");
     client.print(digitalRead(9));
     client.println(" HTTP/1.1");
-	//Old parameter: client.println("Host: admin.fablab-lacote.ch"); 
-	client.println("Host: admin.fablab-lacote.ch");
+    //Old parameter: client.println("Host: admin.fablab-lacote.ch");
+    client.println("Host: admin.fablab-lacote.ch");
     //client.println("Content-Type: application/json");
     client.println("Connection: close");
     client.println();
@@ -138,40 +137,41 @@ void http_request(uint32_t id) {
 
   while (client.connected()) {
 
-    // if there are incoming bytes available
-    // from the server, read them and print them:
+    // if there are incoming bytes available from the server, read them
     while (client.available()) {
 
       char c = client.read();
       result = result + c;
 
-
       // Process data line by line and ignore HTTP headers and other useless info
-      if (result.endsWith("\r\n\r\n") || result.endsWith("\n\n"))
+      if (result.endsWith("\r\n\r\n"))
       {
-        Serial.println("CLEAN");
-        Serial.println(result);
-        Serial.println("END CLEAN");
-        result = ""; //clean processed result line
+        if (result.startsWith("Hello")) {
+          int i = 0;
+          while (result[i] != '\n') {
+            Serial.print(result[i]);
+            i++;
+          }
+          Serial.println();
+          Serial.println("User FOUND");
+          user_found();
+        }
+        else if (result.startsWith("Carte Inconnue")) {
+          Serial.println("User _NOT_ FOUND");
+          user_not_found();
+        }
+        else {
+          //Do nothing with header, skip http payload length
+          while (client.read() != '\n') {}
+        }
+
+        result = ""; //clean processed result lines
 
       }
     }
-  }
-  
-  if (result.startsWith("Hello")) {
-    Serial.println(result);
-    user_found();
-  }
-  else if (result.startsWith("Carte Inconnue")) {
-    Serial.println(result);
-    user_not_found();
-  }
-  else {
-    Serial.print("not a result: >>");
-    Serial.print(result);
-    Serial.println("<<<");
-  }
 
+
+  }
 
 
 
@@ -187,10 +187,10 @@ void http_request(uint32_t id) {
 void user_found() {
   digitalWrite(GreenLed, HIGH);
   for (int i = 1; i < 100; i++) {
-    digitalWrite(SoundPin, HIGH);   // set the pin HIGH
-    delayMicroseconds(500);         // wait for a bit
-    digitalWrite(SoundPin, LOW);    // set the pin LOW
-    delayMicroseconds(500);         // wait for a bit
+    digitalWrite(SoundPin, HIGH); // set the pin HIGH
+    delayMicroseconds(500); // wait for a bit
+    digitalWrite(SoundPin, LOW); // set the pin LOW
+    delayMicroseconds(500); // wait for a bit
   }
   delay(2000);
   digitalWrite(GreenLed, LOW);
@@ -199,13 +199,11 @@ void user_found() {
 void user_not_found() {
   digitalWrite(RedLed, HIGH);
   for (int i = 1; i < 200; i++) {
-    digitalWrite(SoundPin, HIGH);   // set the pin HIGH
-    delayMicroseconds(2000);        // wait for a bit
-    digitalWrite(SoundPin, LOW);    // set the pin LOW
-    delayMicroseconds(2000);        // wait for a bit
+    digitalWrite(SoundPin, HIGH); // set the pin HIGH
+    delayMicroseconds(2000); // wait for a bit
+    digitalWrite(SoundPin, LOW); // set the pin LOW
+    delayMicroseconds(2000); // wait for a bit
   }
   delay(2000);
   digitalWrite(RedLed, LOW);
 }
-
-
