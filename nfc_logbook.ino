@@ -173,12 +173,6 @@ void http_request(uint32_t id) {
 
   }
 
-
-
-
-
-
-
   Serial.println("disconnecting.");
   client.stop();
 
